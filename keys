@@ -1,0 +1,3 @@
+projectUrl=https://xdfitzldbjbpxxobrdif.supabase.co
+apiKey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkZml0emxkYmpicHh4b2JyZGlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ3Mzc3MjMsImV4cCI6MjA1MDMxMzcyM30.UNGSspXT9gH9rvEdVtgZGK3QCFrqmkumUNUutfwdCdI
+postgre=postgresql://postgres:99Mordekai99$@db.xdfitzldbjbpxxobrdif.supabase.co:5432/postgres
