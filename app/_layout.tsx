@@ -12,6 +12,7 @@ import "react-native-reanimated";
 import "./styles/global.css";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Header } from "react-native/Libraries/NewAppScreen";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -37,6 +38,12 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(person)"
+          options={{
+            title: "Pessoas",
+          }}
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

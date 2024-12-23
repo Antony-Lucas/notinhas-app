@@ -11,6 +11,7 @@ export default function usePerson() {
   const [adress, setAdress] = useState("");
   const [observation, setObservation] = useState("");
   const [personList, setPersonList] = useState<any[]>([]);
+  const [personDataUpdate, setPersonDataUpdate] = useState<any[]>([]);
 
   const session = useCurrentSession();
 
@@ -65,7 +66,21 @@ export default function usePerson() {
         .eq("user_id", session?.user.id);
 
       error ? setPersonList([]) : setPersonList(data || []);
-      console.log(personList);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async function getPersonById({ id }: { id: string }) {
+    try {
+      const { data, error } = await supabaseUtil
+        .from("person")
+        .select("*")
+        .eq("id", id);
+
+      console.log(data);
+      error ? setPersonDataUpdate([]) : setPersonDataUpdate(data || []);
     } catch (error) {
       console.log(error);
       throw error;
@@ -88,5 +103,7 @@ export default function usePerson() {
     setObservation,
     clearPersonFields,
     personList,
+    getPersonById,
+    personDataUpdate,
   };
 }
