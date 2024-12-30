@@ -1,4 +1,4 @@
-import {
+/*import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
@@ -40,4 +40,4 @@ export function LoginWithGoogle() {
       <Text>Login com Google</Text>
     </Button>
   );
-}
+}*/

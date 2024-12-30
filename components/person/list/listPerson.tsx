@@ -1,9 +1,9 @@
-import { Button } from "@/components/Button";
-import { Text } from "@/components/Text";
 import usePerson from "@/hooks/person/person";
 import { FlashList } from "@shopify/flash-list";
 import { View } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import { Button, ButtonText } from "@/components/ui/button";
+import { ChevronRightIcon, Icon } from "@/components/ui/icon";
 
 export default function ListPerson() {
   const { personList, getPersonById } = usePerson();
@@ -14,15 +14,19 @@ export default function ListPerson() {
         data={personList}
         renderItem={({ item }) => (
           <Button
-            variant={"outline"}
+            variant={"link"}
             size={"lg"}
-            className="flex items-start"
+            className="flex justify-between items-center"
             onPress={() => {
               router.push({ pathname: "/(person)", params: { id: item.id } });
               getPersonById({ id: item.id });
             }}
           >
-            <Text>{item.name}</Text>
+            <ButtonText>{item.name}</ButtonText>
+            <Icon
+              as={ChevronRightIcon}
+              className="text-typography-500 m-2 w-4 h-4"
+            />
           </Button>
         )}
         estimatedItemSize={200}

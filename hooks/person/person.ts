@@ -12,6 +12,7 @@ export default function usePerson() {
   const [observation, setObservation] = useState("");
   const [personList, setPersonList] = useState<any[]>([]);
   const [personDataUpdate, setPersonDataUpdate] = useState<any[]>([]);
+  const [sessionReady, setSessionReady] = useState(false);
 
   const session = useCurrentSession();
 
@@ -59,6 +60,7 @@ export default function usePerson() {
   }
 
   async function getPersons() {
+    if (!session?.user?.id) return;
     try {
       const { data, error } = await supabaseUtil
         .from("person")
@@ -66,6 +68,9 @@ export default function usePerson() {
         .eq("user_id", session?.user.id);
 
       error ? setPersonList([]) : setPersonList(data || []);
+      console.log("user: ", session?.user.id);
+      console.log("error", error);
+      console.log(personList);
     } catch (error) {
       console.log(error);
       throw error;
@@ -79,19 +84,36 @@ export default function usePerson() {
         .select("*")
         .eq("id", id);
 
-      console.log(data);
+      console.log("id: ", data);
       error ? setPersonDataUpdate([]) : setPersonDataUpdate(data || []);
+      console.log(personDataUpdate);
     } catch (error) {
       console.log(error);
       throw error;
     }
   }
 
+  async function updatePerson({ id }: { id: string }) {
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    getPersons();
+    if (session?.user.id) {
+      setSessionReady(true);
+    }
   }, [session?.user.id]);
 
+  useEffect(() => {
+    if (sessionReady) {
+      getPersons();
+    }
+  }, [sessionReady]);
+
   return {
+    updatePerson,
     createPerson,
     name,
     setName,

@@ -1,9 +1,14 @@
 import { supabaseUtil } from "@/utils/supabaseUtil";
 import React, { useState } from "react";
 import { Alert, StyleSheet, View, AppState } from "react-native";
-import { Input } from "@/components/Input";
-import { Text } from "@/components/Text";
-import { Button } from "../Button";
+import { ThemedView } from "../ThemedView";
+import {
+  FormControl,
+  FormControlLabel,
+  FormControlLabelText,
+} from "../ui/form-control";
+import { Input, InputField } from "../ui/input";
+import { Button, ButtonText } from "../ui/button";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -65,32 +70,57 @@ export default function EmailAndPasswordAuth() {
   }
 
   return (
-    <View>
-      <View>
-        <Input
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          placeholder="email@address.com"
-          autoCapitalize={"none"}
-        />
-        <Input
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          placeholder="Senha"
-          autoCapitalize={"none"}
-        />
-      </View>
-      <View>
-        <Button disabled={loading} onPress={() => signInWithEmail()}>
-          <Text>Entrar</Text>
-        </Button>
-      </View>
-      <View>
-        <Button disabled={loading} onPress={() => signUpWithEmail()}>
-          <Text>Cadastrar-se</Text>
-        </Button>
-      </View>
-    </View>
+    <ThemedView>
+      <FormControl size="lg">
+        <FormControlLabel>
+          <FormControlLabelText>Email</FormControlLabelText>
+        </FormControlLabel>
+        <Input size={"lg"}>
+          <InputField
+            type="text"
+            className="py-0"
+            placeholder="email"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+          />
+        </Input>
+      </FormControl>
+      <FormControl size="md">
+        <FormControlLabel>
+          <FormControlLabelText>Password</FormControlLabelText>
+        </FormControlLabel>
+        <Input size={"lg"}>
+          <InputField
+            type="password"
+            className="py-0"
+            placeholder="password"
+            autoCapitalize="none"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+        </Input>
+      </FormControl>
+      <Button
+        disabled={loading}
+        className="mt-4"
+        size="lg"
+        onPress={() => {
+          signInWithEmail();
+        }}
+      >
+        <ButtonText>Entrar</ButtonText>
+      </Button>
+      <Button
+        disabled={loading}
+        className=" mt-4"
+        size="lg"
+        onPress={() => {
+          signUpWithEmail();
+        }}
+      >
+        <ButtonText>Criar conta</ButtonText>
+      </Button>
+    </ThemedView>
   );
 }
