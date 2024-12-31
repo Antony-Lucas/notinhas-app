@@ -18,11 +18,13 @@ import {
 import { Heading } from "@/components/ui/heading";
 import { Input, InputField } from "@/components/ui/input";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
+import { FormControl } from "@/components/ui/form-control";
 export default function CreatePerson() {
   const [showAddPerson, setShowAddPerson] = React.useState(false);
   const handleClose = () => setShowAddPerson(false);
   const {
     createPerson,
+    getPersons,
     clearPersonFields,
     name,
     setName,
@@ -33,6 +35,7 @@ export default function CreatePerson() {
     observation,
     setObservation,
   } = usePerson();
+
   return (
     <ThemedView>
       <Button
@@ -55,41 +58,42 @@ export default function CreatePerson() {
           <ActionsheetItem onPress={handleClose}>
             <Heading>adicionar pessoa</Heading>
           </ActionsheetItem>
-          <ActionsheetItem>
-            <Input size="lg" className="w-full">
-              <InputField
-                className="py-0"
-                placeholder="Nome completo"
-                value={name}
-                onChangeText={(text) => setName(text)}
-              />
-            </Input>
-          </ActionsheetItem>
-          <ActionsheetItem>
-            <Input size="lg" className="w-full">
-              <InputField
-                className="py-0"
-                placeholder="Contato"
-                onChangeText={(text) => setContact(text)}
-              />
-            </Input>
-          </ActionsheetItem>
-          <ActionsheetItem>
-            <Input size="lg" className="w-full">
-              <InputField
-                className="py-0"
-                placeholder="Endereço"
-                onChangeText={(text) => setAdress(text)}
-              />
-            </Input>
-          </ActionsheetItem>
-          <ActionsheetItem>
-            <Textarea size="lg" className="w-full">
-              <TextareaInput
-                placeholder="Observação"
-                onChangeText={(text) => setObservation(text)}
-              />
-            </Textarea>
+          <ActionsheetItem className="w-full">
+            <FormControl
+              size="lg"
+              className="w-full flex flex-col gap-4"
+              key={showAddPerson ? "add-person-key" : "default-key"}
+            >
+              <Input size="lg" className="w-full">
+                <InputField
+                  autoFocus
+                  className="py-0"
+                  placeholder="Nome completo"
+                  onChangeText={(text) => setName(text)}
+                />
+              </Input>
+              <Input size="lg" className="w-full">
+                <InputField
+                  keyboardType="phone-pad"
+                  className="py-0"
+                  placeholder="(00) 00000-0000"
+                  onChangeText={(text) => setContact(text)}
+                />
+              </Input>
+              <Input size="lg" className="w-full">
+                <InputField
+                  className="py-0"
+                  placeholder="Av. Moura Carvalho"
+                  onChangeText={(text) => setAdress(text)}
+                />
+              </Input>
+              <Textarea size="lg" className="w-full">
+                <TextareaInput
+                  placeholder="Observação"
+                  onChangeText={(text) => setObservation(text)}
+                />
+              </Textarea>
+            </FormControl>
           </ActionsheetItem>
           <ActionsheetItem>
             <Button
@@ -104,8 +108,9 @@ export default function CreatePerson() {
               size="lg"
               className="w-1/2"
               onPress={() => {
-                createPerson({ name, adress, contact, observation }),
-                  clearPersonFields();
+                setShowAddPerson(false);
+                createPerson({ name, adress, contact, observation });
+                getPersons();
               }}
             >
               <ButtonText>Adicionar</ButtonText>
