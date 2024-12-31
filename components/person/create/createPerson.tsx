@@ -56,7 +56,7 @@ export default function CreatePerson() {
             <ActionsheetDragIndicator />
           </ActionsheetDragIndicatorWrapper>
           <ActionsheetItem onPress={handleClose}>
-            <Heading>adicionar pessoa</Heading>
+            <Heading>Adicionar pessoa</Heading>
           </ActionsheetItem>
           <ActionsheetItem className="w-full">
             <FormControl

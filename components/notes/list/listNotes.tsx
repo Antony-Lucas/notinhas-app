@@ -1,31 +1,27 @@
-import usePerson from "@/hooks/person/person";
-import { FlashList } from "@shopify/flash-list";
-import { ScrollView, View } from "react-native";
-import { useRouter } from "expo-router";
 import { Button, ButtonText } from "@/components/ui/button";
 import { ChevronRightIcon, Icon } from "@/components/ui/icon";
+import useNotes from "@/context/notes/useNotes";
+import { FlashList } from "@shopify/flash-list";
+import { router } from "expo-router";
+import { ScrollView } from "react-native";
 
-export default function ListPerson() {
-  const { personList } = usePerson();
-  const router = useRouter();
+export default function ListNotes({ id }: { id: number }) {
+  const { noteList } = useNotes({ personId: id });
   return (
     <ScrollView className="w-full p-6 pb-10 pt-0">
       <FlashList
         inverted
-        data={personList}
+        data={noteList}
         renderItem={({ item }) => (
           <Button
             variant="link"
             size={"lg"}
-            className="flex justify-between items-center px-4 h-14 mt-1"
+            className="flex justify-between items-center h-14 mt-1"
             onPress={() => {
-              router.push({
-                pathname: "/(person)",
-                params: { id: item.id, name: item.name },
-              });
+              router.push({ pathname: "/(notes)", params: { id: item.id } });
             }}
           >
-            <ButtonText className="color-primary-950">{item.name}</ButtonText>
+            <ButtonText className="color-primary-950">{item.date}</ButtonText>
             <Icon
               as={ChevronRightIcon}
               className="text-typography-500 my-2 w-4 h-4"
