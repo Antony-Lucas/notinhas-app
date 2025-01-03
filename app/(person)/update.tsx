@@ -8,14 +8,13 @@ import usePerson from "@/hooks/person/person";
 import { useLocalSearchParams } from "expo-router";
 
 export default function UpdatePersonScreen() {
-  const { updateid } = useLocalSearchParams();
-  const { name } = usePerson();
+  const { updateid, updateName } = useLocalSearchParams();
   return (
     <UpdatePersonMenuProvider>
       <ThemedView className="h-full flex py-12 px-4 bg-white">
         <CustomHeader
           id={String(updateid)}
-          name={name}
+          name={String(updateName)}
           isSecondRouter={false}
         />
         <UpdatePerson id={String(updateid)} />

@@ -112,6 +112,7 @@ export default function usePerson() {
         contact: contact,
         adress: adress,
         observation: observation,
+        update_at: new Date(),
       };
 
       const { error, data } = await supabaseUtil

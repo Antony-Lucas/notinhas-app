@@ -38,7 +38,7 @@ export default function CustomHeader({
           onPress={() => {
             router.push({
               pathname: "/(person)/update",
-              params: { updateid: id },
+              params: { updateid: id, updateName: name },
             });
           }}
         >

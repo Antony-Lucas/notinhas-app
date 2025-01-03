@@ -1,6 +1,6 @@
 import { Button, ButtonText } from "@/components/ui/button";
 import { ChevronRightIcon, Icon } from "@/components/ui/icon";
-import useNotes from "@/context/notes/useNotes";
+import useNotes from "@/hooks/notes/useNotes";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { ScrollView } from "react-native";
@@ -8,7 +8,7 @@ import { ScrollView } from "react-native";
 export default function ListNotes({ id }: { id: number }) {
   const { noteList } = useNotes({ personId: id });
   return (
-    <ScrollView className="w-full p-6 pb-10 pt-0">
+    <ScrollView className="w-full p-3 pb-10 pt-0">
       <FlashList
         inverted
         data={noteList}
@@ -18,10 +18,13 @@ export default function ListNotes({ id }: { id: number }) {
             size={"lg"}
             className="flex justify-between items-center h-14 mt-1"
             onPress={() => {
-              router.push({ pathname: "/(notes)", params: { id: item.id } });
+              router.push({
+                pathname: "/(notes)",
+                params: { noteId: item.id, noteTitle: item.title },
+              });
             }}
           >
-            <ButtonText className="color-primary-950">{item.date}</ButtonText>
+            <ButtonText className="color-primary-950">{item.title}</ButtonText>
             <Icon
               as={ChevronRightIcon}
               className="text-typography-500 my-2 w-4 h-4"

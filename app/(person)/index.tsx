@@ -19,7 +19,7 @@ export default function PersonScreen() {
           id={String(id)}
           isSecondRouter={true}
         />
-        <Heading>Notas de {name}</Heading>
+        <Heading className="py-6 px-3">Notas de {name}</Heading>
         <ScrollView>
           <ListNotes id={Number(id)} />
         </ScrollView>
