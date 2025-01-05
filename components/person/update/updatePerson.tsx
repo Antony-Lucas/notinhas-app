@@ -46,13 +46,24 @@ export default function UpdatePerson({ id }: { id?: string }) {
       <ThemedView className="flex flex-col gap-10 ">
         <View className="flex flex-row justify-between items-center">
           <Heading>Informações</Heading>
-          <Button
-            variant="outline"
-            className="w-14 h-14 rounded-full"
-            onPress={() => toggleMenu()}
-          >
-            <Icon as={TrashIcon} className="text-red-500 m-2 w-6 h-6 " />
-          </Button>
+          <View className="flex flex-row gap-4">
+            <Button
+              variant="solid"
+              className="w-28 h-12 rounded-full"
+              onPress={() => {
+                updatePerson({ id, name, contact, adress, observation });
+              }}
+            >
+              <ButtonText>Salvar</ButtonText>
+            </Button>
+            <Button
+              variant="outline"
+              className="w-12 h-12 rounded-full"
+              onPress={() => toggleMenu()}
+            >
+              <Icon as={TrashIcon} className="text-red-500 m-2 w-6 h-6 " />
+            </Button>
+          </View>
         </View>
         <FormControl size="lg" className="w-full flex flex-col gap-4">
           <Input size="lg" className="w-full">
@@ -88,16 +99,6 @@ export default function UpdatePerson({ id }: { id?: string }) {
             />
           </Textarea>
         </FormControl>
-      </ThemedView>
-      <ThemedView className="w-full flex flex-row">
-        <Button
-          className="w-full h-14 rounded-full"
-          onPress={() => {
-            updatePerson({ id, name, contact, adress, observation });
-          }}
-        >
-          <ButtonText>Atualizar</ButtonText>
-        </Button>
       </ThemedView>
     </ThemedView>
   );

@@ -7,13 +7,12 @@ export default function useNotes({ personId }: { personId?: number }) {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("Em aberto");
   const [value, setValue] = useState<string>("");
   const [date, setDate] = useState(new Date());
   const [noteList, setNoteList] = useState<any[]>([]);
   const [sessionReady, setSessionReady] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
-  const [noteUpdate, setNoteUpdate] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState(
     new Date().toLocaleDateString("pt-BR")
   );
@@ -28,7 +27,6 @@ export default function useNotes({ personId }: { personId?: number }) {
   };
 
   const handleConfirm = (date: any) => {
-    console.log("Data selecionada:", date);
     setDate(date);
     setInputValue(`${date.toLocaleDateString("pt-BR")}`);
     hideDatePicker();
@@ -37,7 +35,7 @@ export default function useNotes({ personId }: { personId?: number }) {
   function clearFields() {
     setTitle("");
     setDescription("");
-    setStatus("");
+    setStatus("Em aberto");
     setValue("");
     setDate(new Date());
   }
@@ -103,13 +101,19 @@ export default function useNotes({ personId }: { personId?: number }) {
       const { error, data } = await supabaseUtil
         .from("notes")
         .select("*")
-        .eq("id", id);
+        .eq("id", id)
+        .single();
 
       if (error) {
         console.log(error);
       }
-
-      setNoteUpdate(data || []);
+      if (data) {
+        setTitle(data.title || "");
+        setDescription(data.description || "");
+        setStatus(data.status || "");
+        setValue(data.value ? data.value.toString() : "0");
+        setDate(new Date(data.date));
+      }
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);
@@ -132,7 +136,7 @@ export default function useNotes({ personId }: { personId?: number }) {
         status,
         value,
         date,
-        update_at: new Date(),
+        updated_at: new Date(),
       };
 
       const { error, data } = await supabaseUtil
@@ -201,7 +205,6 @@ export default function useNotes({ personId }: { personId?: number }) {
     inputValue,
     setShowPicker,
     showPicker,
-    noteUpdate,
     clearFields,
     handleConfirm,
     hideDatePicker,

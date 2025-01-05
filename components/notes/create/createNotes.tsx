@@ -4,28 +4,18 @@ import { FormControl } from "@/components/ui/form-control";
 import { Input, InputField } from "@/components/ui/input";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
 import useNotes from "@/hooks/notes/useNotes";
-import React, { useEffect, useRef, useState } from "react";
-import { Alert, Platform, TouchableOpacity } from "react-native";
-import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import React, { useState } from "react";
+import { Alert, TouchableOpacity, View } from "react-native";
 import { Icon } from "@/components/ui/icon/index.web";
 import { CalendarDaysIcon } from "@/components/ui/icon";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import useCurrencyFormatter from "@/hooks/formatter/useCurrencyFormatter";
+import Modal from "react-native-modal";
+import StatusNotes from "../status/statusNotes";
+import { Text } from "@/components/ui/text";
 
 export default function CreateNotes({ id }: { id: number }) {
-  const [showAddNotes, setShowAddNotes] = React.useState(false);
-
-  const handleClose = () => setShowAddNotes(false);
-
-  const actionSheetRef = useRef<ActionSheetRef>(null);
-  useEffect(() => {
-    if (showAddNotes) {
-      actionSheetRef.current?.show();
-    } else {
-      actionSheetRef.current?.hide();
-    }
-  }, [showAddNotes]);
-
+  const [showAddNotes, setShowAddNotes] = useState(false);
   const { formatCurrency } = useCurrencyFormatter();
 
   const {
@@ -39,7 +29,6 @@ export default function CreateNotes({ id }: { id: number }) {
     status,
     setValue,
     value,
-    setDate,
     date,
     setInputValue,
     inputValue,
@@ -53,107 +42,114 @@ export default function CreateNotes({ id }: { id: number }) {
 
   return (
     <ThemedView>
-      <ActionSheet ref={actionSheetRef} onClose={handleClose}>
-        <FormControl
-          size="lg"
-          className="w-full flex flex-col gap-4"
-          key={showAddNotes ? "add-person-key" : "default-key"}
-        >
-          <Input size="lg" className="w-full">
-            <InputField
-              className="py-0"
-              placeholder="Título"
-              value={title}
-              onChangeText={(text) => {
-                setTitle(text);
+      <Modal
+        isVisible={showAddNotes}
+        onBackButtonPress={() => {
+          setShowAddNotes(false);
+        }}
+        onBackdropPress={() => {
+          setShowAddNotes(false);
+        }}
+      >
+        <ThemedView className="bg-background-light p-6 py-10 rounded-lg">
+          <Text>{status}</Text>
+          <FormControl size="lg" className="w-full flex flex-col gap-4 ">
+            <Input size="lg" className="w-full">
+              <InputField
+                className="py-0"
+                placeholder="Título"
+                onChangeText={(text) => {
+                  setTitle(text);
+                }}
+              />
+            </Input>
+            <Input isDisabled size="lg" className="w-full">
+              <InputField
+                keyboardType="phone-pad"
+                className="py-0"
+                placeholder="DD/MM/YYYY"
+                value={inputValue}
+                onChangeText={(text) => setInputValue(text)}
+              />
+              <TouchableOpacity
+                onPress={() => setShowPicker(true)}
+                className="p-2 ml-4 rounded-sm bg-secondary-950"
+              >
+                <Icon
+                  as={CalendarDaysIcon}
+                  className="text-typography-800 m-2 w-6 h-6"
+                />
+                <DateTimePickerModal
+                  isVisible={showPicker}
+                  mode="date"
+                  locale="pt-BR"
+                  onConfirm={handleConfirm}
+                  onCancel={hideDatePicker}
+                />
+              </TouchableOpacity>
+            </Input>
+            <Input size="lg" className="w-full">
+              <InputField
+                keyboardType="phone-pad"
+                className="py-0"
+                placeholder="0,00"
+                value={formatCurrency(value)}
+                onChangeText={(text) => {
+                  let formattedValue = formatCurrency(text);
+                  setValue(formattedValue);
+                }}
+              />
+            </Input>
+
+            <Textarea size="lg" className="w-full">
+              <TextareaInput
+                placeholder="Descrição"
+                onChangeText={(text) => {
+                  setDescription(text);
+                }}
+              />
+            </Textarea>
+            <StatusNotes status={status} setStatus={setStatus} />
+          </FormControl>
+          <View className="flex flex-row pt-10">
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-1/2"
+              onPress={() => {
+                setShowAddNotes(false);
+                clearFields();
               }}
-            />
-          </Input>
-          <Input isDisabled size="lg" className="w-full">
-            <InputField
-              keyboardType="phone-pad"
-              className="py-0"
-              placeholder="DD/MM/YYYY"
-              value={inputValue}
-              onChangeText={(text) => setInputValue(text)}
-            />
-            <TouchableOpacity
-              onPress={() => setShowPicker(true)}
-              className="p-2 ml-4 rounded-sm bg-secondary-950"
             >
-              <Icon
-                as={CalendarDaysIcon}
-                className="text-typography-800 m-2 w-6 h-6"
-              />
-              <DateTimePickerModal
-                isVisible={showPicker}
-                mode="date"
-                locale="pt-BR"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-              />
-            </TouchableOpacity>
-          </Input>
-
-          <Input size="lg" className="w-full">
-            <InputField
-              keyboardType="phone-pad"
-              className="py-0"
-              placeholder="0,00"
-              value={formatCurrency(value)}
-              onChangeText={(text) => {
-                let formattedValue = formatCurrency(text);
-                setValue(formattedValue);
-              }}
-            />
-          </Input>
-
-          <Textarea size="lg" className="w-full">
-            <TextareaInput
-              placeholder="Descrição"
-              onChangeText={(text) => {
-                setDescription(text);
-              }}
-            />
-          </Textarea>
-        </FormControl>
-        <ThemedView className="w-full flex flex-row">
-          <Button
-            variant="outline"
-            size="lg"
-            className="w-1/2"
-            onPress={() => {
-              handleClose();
-              clearFields();
-            }}
-          >
-            <ButtonText>Fechar</ButtonText>
-          </Button>
-          <Button
-            size="lg"
-            className="w-1/2"
-            onPress={() => {
-              setShowAddNotes(false);
-              if (date instanceof Date && !isNaN(date.getTime())) {
-                createNote({
-                  title,
-                  description,
-                  status,
-                  value: formatValueForDatabase(value),
-                  date,
-                });
+              <ButtonText>Fechar</ButtonText>
+            </Button>
+            <Button
+              size="lg"
+              className="w-1/2"
+              onPress={() => {
+                setShowAddNotes(false);
+                if (date instanceof Date && !isNaN(date.getTime())) {
+                  createNote({
+                    title,
+                    description,
+                    status,
+                    value: formatValueForDatabase(value),
+                    date,
+                  });
+                  getNotes();
+                } else {
+                  Alert.alert("Por favor, selecione uma data válida.");
+                }
+                clearFields();
                 getNotes();
-              } else {
-                Alert.alert("Por favor, selecione uma data válida.");
-              }
-              clearFields();
-              getNotes();
-            }}
-          >
-            <ButtonText>Adicionar</ButtonText>
-          </Button>
+              }}
+            >
+              <ButtonText>Adicionar</ButtonText>
+            </Button>
+          </View>
         </ThemedView>
-      </ActionSheet>
+      </Modal>
+
       <Button
         onPress={() => setShowAddNotes(true)}
         size={"lg"}
