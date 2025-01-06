@@ -1,4 +1,4 @@
-export interface NoteContextType {
+export interface NoteContextInterface {
   openNoteAction: boolean;
   toggleMenu: () => void;
 }

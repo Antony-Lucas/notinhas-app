@@ -46,7 +46,7 @@ export default function UpdateNotes({ id }: { id: number }) {
   }, [id]);
 
   return (
-    <ThemedView className="h-full flex justify-between px-2 pt-4 pb-4">
+    <ThemedView className="h-max flex justify-between px-2 pt-4">
       <ThemedView className="flex flex-col gap-10 ">
         <View className="flex flex-row justify-between items-center">
           <Heading>Informações</Heading>
@@ -141,11 +141,6 @@ export default function UpdateNotes({ id }: { id: number }) {
             />
           </Textarea>
         </FormControl>
-      </ThemedView>
-      <ThemedView className="w-full flex flex-row">
-        <Button className="w-full h-14 rounded-full">
-          <ButtonText>Adicionar baixa</ButtonText>
-        </Button>
       </ThemedView>
     </ThemedView>
   );
